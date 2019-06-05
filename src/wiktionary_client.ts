@@ -1,31 +1,61 @@
 export class WiktionaryClient {
-  get(title: string) {
-    const url = "https://en.wiktionary.org/w/api.php"
-    const params =
-      "action=parse" +
-      // need origin=* for cors reasons
-      "&origin=*" +
-      "&format=json" +
-      `&page=${title}`
+  /**
+   * Gets the sections from the api, filters them for one matching "Etymology"
+   * then just gets that sections text
+   */
+  getEtymology(title: string) {
+    const sectionsPromise = this.getSections(title).then(this.parseGet)
+    const sectionNumberPromise = sectionsPromise.then(sections =>
+      sections.filter(section => section.line === "Etymology"),
+    )
+    const sectionPromise = sectionNumberPromise.then(matchingSections => {
+      if (matchingSections.length) {
+        const sectionNumber = parseInt(matchingSections[0].index)
+        return this.getSection(title, sectionNumber)
+      } else {
+        throw new Error('No sections matching "Etymology" found')
+      }
+    })
+    return sectionPromise.then(this.parseGet)
+  }
 
-    return fetch(`${url}?${params}`)
-      .then(response => response.json())
-      .then(this.parseGet)
-      .catch(console.error)
+  getSection(title: string, sectionNumber: number) {
+    const action = "parse"
+    const props = `&page=${title}&section=${sectionNumber}&prop=text`
+    return this.fetch(action, props).then(this.parseGet)
+  }
+
+  getSections(title: string) {
+    const action = "parse"
+    const props = `&page=${title}&prop=section`
+    return this.fetch(action, props).then(this.parseGet)
+  }
+
+  get(title: string) {
+    const action = "parse"
+    const props = `&page=${title}`
+    return this.fetch(action, props).then(this.parseGet)
   }
 
   search(query: string) {
+    const action = "opensearch"
+    const props = `&search=${query}`
+    return this.fetch(action, props).then(this.parseSearch)
+  }
+
+  private fetch(action: string, props: string) {
     const url = "https://en.wiktionary.org/w/api.php"
     const params =
-      "action=opensearch" +
+      `action=${action}` +
       // need origin=* for cors reasons
       "&origin=*" +
       "&format=json" +
-      `&search=${query}`
+      "&disableeditsection" +
+      "&disablelimitreport" +
+      props
 
     return fetch(`${url}?${params}`)
       .then(response => response.json())
-      .then(this.parseSearch)
       .catch(console.error)
   }
 
@@ -38,21 +68,6 @@ export class WiktionaryClient {
   }
 
   private parseGet(data) {
-    /*
-     * all the data we care about is on the "parse" key
-     * inside parse there's a "sections" key which tells us
-     * the indvidual headings on the page
-					anchor: "Persian"
-					byteoffset: 18
-					fromtitle: "سگ"
-					index: "1"
-					level: "2"
-					line: "Persian"
-					number: "1"
-					toclevel: 1<Paste>
-		 * there's also an images key which is _a lie_. you can find audio files here
-		 * but i think they need to be queried from the wikimedia api
-     */
-    return data.parse;
+    return data.parse
   }
 }
