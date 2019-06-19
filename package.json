@@ -5,8 +5,9 @@
   "homepage": "https://kavehsajjadi.github.io/wordy",
   "main": "webpack.config.js",
   "scripts": {
-    "build": "webpack",
+    "build:app": "webpack",
     "build:pages": "gh-pages -d build",
+    "build": "yarn build:app && yarn build:pages",
     "dev": "webpack-dev-server --mode=development",
     "test": "jest",
     "test:watch": "jest --watch",
