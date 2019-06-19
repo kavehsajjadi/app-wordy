@@ -59,6 +59,7 @@ class TranslateSection extends React.Component<
     value: string,
   ) => {
     this.setState({ [from]: value })
+    // @ts-ignore
     this.translate(value, from, to)
   }
 

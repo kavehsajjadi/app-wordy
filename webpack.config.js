@@ -10,7 +10,6 @@ module.exports = {
     path: path.resolve(__dirname, "./build"),
     filename: "main.bundle.js",
   },
-
   module: {
     rules: [
       {

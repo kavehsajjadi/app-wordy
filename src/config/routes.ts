@@ -4,7 +4,7 @@ import { TranslatePage } from "pages/translate"
 export const routes = [
   {
     component: MainPage,
-    path: "/",
+    path: "/main",
   },
   {
     component: MainPage,
@@ -12,6 +12,6 @@ export const routes = [
   },
   {
     component: TranslatePage,
-    path: "/translate",
+    path: "/",
   },
 ]
