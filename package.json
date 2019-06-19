@@ -2,9 +2,11 @@
   "name": "blank",
   "version": "1.0.0",
   "description": "",
+  "homepage": "https://kavehsajjadi.github.io/wordy",
   "main": "webpack.config.js",
   "scripts": {
     "build": "webpack",
+    "build:pages": "gh-pages -d build",
     "dev": "webpack-dev-server --mode=development",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -15,6 +17,7 @@
   "dependencies": {
     "auth0-js": "^9.10.0",
     "classnames": "^2.2.6",
+    "gh-pages": "^2.0.1",
     "google-translate-api-browser": "^1.1.71",
     "he": "^1.2.0",
     "moment": "^2.24.0",
