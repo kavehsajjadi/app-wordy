@@ -1,8 +1,8 @@
+import { GoogleClient } from "google_client"
 import * as React from "react"
-import { setCORS } from "google-translate-api-browser"
 import { match } from "react-router-dom"
 
-const translateClient = setCORS("http://cors-anywhere.herokuapp.com/")
+const client = new GoogleClient()
 
 type TranslateProps = {
   required: string
@@ -10,81 +10,121 @@ type TranslateProps = {
   location?: Location
 }
 
-export class TranslatePage extends React.Component<TranslateProps> {
-  componentDidMount() {}
+const LANGUAGES = {
+  en: { label: "English", code: "en" },
+  fa: { label: "Iranian", code: "fa" },
+  tr: { label: "Turkish", code: "tr" },
+  it: { label: "Italian", code: "it" },
+}
 
+export class TranslatePage extends React.Component<TranslateProps> {
   render() {
     return (
       <div>
-        <TranslateSection main="en" secondary="fa" tertiary="tr" />
-        <TranslateSection main="fa" secondary="en" tertiary="tr" />
-        <TranslateSection main="tr" secondary="fa" tertiary="en" />
+        <TranslateSection />
       </div>
     )
   }
 }
 
-type TranslateSectionProps = {
-  main: string
-  secondary: string
-  tertiary: string
-}
+type TranslateSectionProps = {}
 type TranslateSectionState = any
 class TranslateSection extends React.Component<
   TranslateSectionProps,
   TranslateSectionState
 > {
   state = {
-    main: "",
-    secondary: "",
-    tertiary: "",
+    [LANGUAGES.en.code]: "",
+    [LANGUAGES.fa.code]: "",
+    [LANGUAGES.tr.code]: "",
+    [LANGUAGES.it.code]: "",
   }
 
   private readonly doTranslate = (value: string, from: string, to: string) => {
-    return translateClient(value, { from, to }).then(
-      (res: { text: string }) => res.text,
-    )
+    return client.translate(value, from, to).catch(console.error)
   }
 
-  private readonly translate = (value: string) => {
-    const { main, secondary, tertiary } = this.props
-    this.setState({ main: value })
-    this.doTranslate(value, main, secondary).then(secondary =>
-      this.setState({ secondary }),
-    )
-    this.doTranslate(value, main, tertiary).then(tertiary =>
-      this.setState({ tertiary }),
-    )
-  }
+  private readonly translate = debounce(
+    (value: string, from: string, to: string[]) => {
+      for (let i = 0; i < to.length; i++) {
+        this.doTranslate(value, from, to[i]).then(text =>
+          this.setState({ [to[i]]: text }),
+        )
+      }
+    },
+    250,
+  )
 
-  private readonly onChange = debounce(this.translate, 250)
+  private readonly onChange = (from: string, to: string[]) => (
+    value: string,
+  ) => {
+    this.setState({ [from]: value })
+    this.translate(value, from, to)
+  }
 
   render() {
-    const { main, secondary, tertiary } = this.state
     return (
-      <div className="card">
-        <div className="card-body">
-          <h6 className="card-title">{this.props.main}</h6>
-          <div className="row">
-            <Column>
-              <TextArea
-                onChange={this.onChange}
-                value={main}
-                label={this.props.main}
-              />
-            </Column>
-            <Column>
-              <TextArea value={secondary} label={this.props.secondary} />
-            </Column>
-            <Column>
-              <TextArea value={tertiary} label={this.props.tertiary} />
-            </Column>
-          </div>
-        </div>
-      </div>
+      <>
+        <Row>
+          <Column>
+            <TextArea
+              onChange={this.onChange(LANGUAGES.en.code, [
+                LANGUAGES.fa.code,
+                LANGUAGES.tr.code,
+                LANGUAGES.it.code,
+              ])}
+              value={this.state[LANGUAGES.en.code]}
+              label={LANGUAGES.en.label}
+            />
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <TextArea
+              onChange={this.onChange(LANGUAGES.fa.code, [
+                LANGUAGES.en.code,
+                LANGUAGES.tr.code,
+                LANGUAGES.it.code,
+              ])}
+              value={this.state[LANGUAGES.fa.code]}
+              label={LANGUAGES.fa.label}
+            />
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <TextArea
+              onChange={this.onChange(LANGUAGES.tr.code, [
+                LANGUAGES.en.code,
+                LANGUAGES.fa.code,
+                LANGUAGES.it.code,
+              ])}
+              value={this.state[LANGUAGES.tr.code]}
+              label={LANGUAGES.tr.label}
+            />
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <TextArea
+              onChange={this.onChange(LANGUAGES.it.code, [
+                LANGUAGES.en.code,
+                LANGUAGES.fa.code,
+                LANGUAGES.tr.code,
+              ])}
+              value={this.state[LANGUAGES.it.code]}
+              label={LANGUAGES.it.label}
+            />
+          </Column>
+        </Row>
+      </>
     )
   }
 }
+
+type RowProps = { children?: React.ReactNode }
+
+const Row = ({ children }: RowProps) => <div className="row">{children}</div>
 
 type ColumnProps = { children?: React.ReactNode }
 
