@@ -1,5 +1,7 @@
+import * as he from 'he'
+
 export class GoogleClient {
-  translate(value: string, from: string, to: string): Promise<any> {
+  translate(value: string, from: string, to: string): Promise<string> {
     const key = "AIzaSyCZmtqZcVHYnsmP8r9Z1eVoTFgkbegFFN0"
     const url =
       "https://translation.googleapis.com/language/translate/v2" +
@@ -14,7 +16,8 @@ export class GoogleClient {
           val => val.translatedText,
         )
         const translatedText = translations.join(" \n")
-        return translatedText
+        const text = he.decode(translatedText)
+        return text
       })
       .catch(console.error)
   }

@@ -15,6 +15,7 @@
     "auth0-js": "^9.10.0",
     "classnames": "^2.2.6",
     "google-translate-api-browser": "^1.1.71",
+    "he": "^1.2.0",
     "moment": "^2.24.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
