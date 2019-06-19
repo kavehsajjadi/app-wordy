@@ -57,21 +57,30 @@ class TranslateSection extends React.Component<
     )
   }
 
-  private readonly onChange = (value: string) => {}
+  private readonly onChange = debounce(this.translate, 250)
 
   render() {
     const { main, secondary, tertiary } = this.state
     return (
-      <div className="row">
-        <Column>
-          <TextArea onChange={this.translate} value={main} label={this.props.main} />
-        </Column>
-        <Column>
-					<TextArea value={secondary} label={this.props.secondary} />
-        </Column>
-        <Column>
-          <TextArea value={tertiary} label={this.props.tertiary} />
-        </Column>
+      <div className="card">
+        <div className="card-body">
+          <h6 className="card-title">{this.props.main}</h6>
+          <div className="row">
+            <Column>
+              <TextArea
+                onChange={this.onChange}
+                value={main}
+                label={this.props.main}
+              />
+            </Column>
+            <Column>
+              <TextArea value={secondary} label={this.props.secondary} />
+            </Column>
+            <Column>
+              <TextArea value={tertiary} label={this.props.tertiary} />
+            </Column>
+          </div>
+        </div>
       </div>
     )
   }
@@ -114,16 +123,18 @@ class TextArea extends React.Component<TextAreaProps> {
   }
 }
 
-function debounce(a, b, c) {
-  var d, e
+function debounce(func, wait, immediate = false) {
+  var timeout
   return function() {
-    function h() {
-      ;(d = null), c || (e = a.apply(f, g))
+    var context = this,
+      args = arguments
+    var later = function() {
+      timeout = null
+      if (!immediate) func.apply(context, args)
     }
-    var f = this,
-      g = arguments
-    return (
-      clearTimeout(d), (d = setTimeout(h, b)), c && !d && (e = a.apply(f, g)), e
-    )
+    var callNow = immediate && !timeout
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+    if (callNow) func.apply(context, args)
   }
 }
