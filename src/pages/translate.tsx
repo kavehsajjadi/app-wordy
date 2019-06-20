@@ -28,28 +28,38 @@ export class TranslatePage extends React.Component<TranslateProps> {
 }
 
 type TranslateSectionProps = {}
-type TranslateSectionState = any
+type TranslateSectionState = {
+  key: string
+  en: string
+  fa: string
+  tr: string
+  it: string
+}
 class TranslateSection extends React.Component<
   TranslateSectionProps,
   TranslateSectionState
 > {
   state = {
-    [LANGUAGES.en.code]: "",
-    [LANGUAGES.fa.code]: "",
-    [LANGUAGES.tr.code]: "",
-    [LANGUAGES.it.code]: "",
+    key: "",
+    en: "",
+    fa: "",
+    tr: "",
+    it: "",
   }
 
   private readonly doTranslate = (value: string, from: string, to: string) => {
-    return client.translate(value, from, to).catch(console.error)
+    return client
+      .translate(this.state.key, value, from, to)
+      .catch(console.error)
   }
 
   private readonly translate = debounce(
     (value: string, from: string, to: string[]) => {
       for (let i = 0; i < to.length; i++) {
-        this.doTranslate(value, from, to[i]).then(text =>
-          this.setState({ [to[i]]: text }),
-        )
+        this.doTranslate(value, from, to[i]).then(text => {
+          // @ts-ignore
+          this.setState({ [to[i]]: text })
+        })
       }
     },
     250,
@@ -58,14 +68,28 @@ class TranslateSection extends React.Component<
   private readonly onChange = (from: string, to: string[]) => (
     value: string,
   ) => {
+    // @ts-ignore
     this.setState({ [from]: value })
     // @ts-ignore
     this.translate(value, from, to)
   }
 
+  private readonly updateKey = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ key: e.target.value })
+  }
+
   render() {
     return (
       <>
+        <Row>
+          <Column>
+            <input
+              value={this.state.key}
+              onChange={this.updateKey}
+              placeholder="Google API Key"
+            />
+          </Column>
+        </Row>
         <Row>
           <Column>
             <TextArea

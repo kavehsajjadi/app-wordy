@@ -1,8 +1,7 @@
 import * as he from 'he'
 
 export class GoogleClient {
-  translate(value: string, from: string, to: string): Promise<string> {
-    const key = "AIzaSyCZmtqZcVHYnsmP8r9Z1eVoTFgkbegFFN0"
+  translate(key: string, value: string, from: string, to: string): Promise<string> {
     const url =
       "https://translation.googleapis.com/language/translate/v2" +
       `?q=${value}` +
