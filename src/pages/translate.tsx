@@ -1,13 +1,20 @@
 import { GoogleClient } from "google_client"
+import { Storage } from "storage"
 import * as React from "react"
 import { match } from "react-router-dom"
-
-const client = new GoogleClient()
+import { Row } from "ui/row"
+import { Column } from "ui/column"
+import { TextArea } from "ui/textarea"
+import { debounce } from "util/debounce"
 
 type TranslateProps = {
   required: string
   match?: match<{}>
   location?: Location
+}
+
+type TranslateState = {
+  googleApiKey: string
 }
 
 const LANGUAGES = {
@@ -17,19 +24,46 @@ const LANGUAGES = {
   it: { label: "Italian", code: "it" },
 }
 
-export class TranslatePage extends React.Component<TranslateProps> {
+export class TranslatePage extends React.Component<
+  TranslateProps,
+  TranslateState
+> {
+  state = {
+    googleApiKey: "",
+  }
+
+  componentDidMount() {
+    const googleApiKey = Storage.get("googleApiKey")
+    if (googleApiKey) this.setState({ googleApiKey })
+  }
+
+  private readonly updateKey = (e: React.ChangeEvent<HTMLInputElement>) => {
+    Storage.set("googleApiKey", e.target.value)
+    this.setState({ googleApiKey: e.target.value })
+  }
+
   render() {
     return (
-      <div>
-        <TranslateSection />
-      </div>
+      <>
+        <Row>
+          <Column>
+            <input
+              value={this.state.googleApiKey}
+              onChange={this.updateKey}
+              placeholder="Google API Key"
+            />
+          </Column>
+        </Row>
+        <TranslateSection googleApiKey={this.state.googleApiKey} />
+      </>
     )
   }
 }
 
-type TranslateSectionProps = {}
+type TranslateSectionProps = {
+  googleApiKey: string
+}
 type TranslateSectionState = {
-  key: string
   en: string
   fa: string
   tr: string
@@ -40,7 +74,6 @@ class TranslateSection extends React.Component<
   TranslateSectionState
 > {
   state = {
-    key: "",
     en: "",
     fa: "",
     tr: "",
@@ -48,9 +81,12 @@ class TranslateSection extends React.Component<
   }
 
   private readonly doTranslate = (value: string, from: string, to: string) => {
-    return client
-      .translate(this.state.key, value, from, to)
-      .catch(console.error)
+    return GoogleClient.translate(
+      this.props.googleApiKey,
+      value,
+      from,
+      to,
+    ).catch(console.error)
   }
 
   private readonly translate = debounce(
@@ -74,22 +110,9 @@ class TranslateSection extends React.Component<
     this.translate(value, from, to)
   }
 
-  private readonly updateKey = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ key: e.target.value })
-  }
-
   render() {
     return (
       <>
-        <Row>
-          <Column>
-            <input
-              value={this.state.key}
-              onChange={this.updateKey}
-              placeholder="Google API Key"
-            />
-          </Column>
-        </Row>
         <Row>
           <Column>
             <TextArea
@@ -144,62 +167,5 @@ class TranslateSection extends React.Component<
         </Row>
       </>
     )
-  }
-}
-
-type RowProps = { children?: React.ReactNode }
-
-const Row = ({ children }: RowProps) => <div className="row">{children}</div>
-
-type ColumnProps = { children?: React.ReactNode }
-
-const Column = ({ children }: ColumnProps) => (
-  <div className="col">{children}</div>
-)
-
-type TextAreaProps = {
-  onChange?(value: string): void
-  value: string
-  label: string
-}
-
-class TextArea extends React.Component<TextAreaProps> {
-  private readonly onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (this.props.onChange) {
-      this.props.onChange(e.target.value)
-    }
-  }
-
-  render() {
-    const { onChange, label, value } = this.props
-    return (
-      <div className="input-group">
-        <div className="input-group-prepend">
-          <span className="input-group-text">{label}</span>
-        </div>
-        <textarea
-          className="form-control"
-          disabled={!onChange}
-          onChange={this.onChange}
-          value={value}
-        />
-      </div>
-    )
-  }
-}
-
-function debounce(func, wait, immediate = false) {
-  var timeout
-  return function() {
-    var context = this,
-      args = arguments
-    var later = function() {
-      timeout = null
-      if (!immediate) func.apply(context, args)
-    }
-    var callNow = immediate && !timeout
-    clearTimeout(timeout)
-    timeout = setTimeout(later, wait)
-    if (callNow) func.apply(context, args)
   }
 }

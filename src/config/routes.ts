@@ -13,6 +13,5 @@ export const routes = [
   {
     component: TranslatePage,
     path: "/",
-    exact: false,
   },
 ]

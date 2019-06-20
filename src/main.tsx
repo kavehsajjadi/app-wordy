@@ -14,7 +14,6 @@ class Main extends React.Component {
           <Route
             key={route.path}
             path={route.path}
-            exact={route.exact != null ? route.exact : true}
             component={route.component}
           />
         ))}
