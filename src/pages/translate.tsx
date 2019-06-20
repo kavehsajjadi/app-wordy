@@ -112,7 +112,7 @@ class TranslateSection extends React.Component<
 
   render() {
     return (
-      <>
+      <div className="translate">
         <Row>
           <Column>
             <TextArea
@@ -165,7 +165,7 @@ class TranslateSection extends React.Component<
             />
           </Column>
         </Row>
-      </>
+      </div>
     )
   }
 }

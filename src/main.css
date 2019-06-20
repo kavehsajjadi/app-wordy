@@ -39,3 +39,7 @@ html, body {
     max-width: 250px;
   }
 }
+
+.translate {
+  font-size: 2em;
+}
