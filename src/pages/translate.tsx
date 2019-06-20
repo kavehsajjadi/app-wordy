@@ -5,6 +5,7 @@ import { match } from "react-router-dom"
 import { Row } from "ui/row"
 import { Column } from "ui/column"
 import { TextArea } from "ui/textarea"
+import { TextInput } from "ui/textinput"
 import { debounce } from "util/debounce"
 
 type TranslateProps = {
@@ -37,24 +38,25 @@ export class TranslatePage extends React.Component<
     if (googleApiKey) this.setState({ googleApiKey })
   }
 
-  private readonly updateKey = (e: React.ChangeEvent<HTMLInputElement>) => {
-    Storage.set("googleApiKey", e.target.value)
-    this.setState({ googleApiKey: e.target.value })
+  private readonly updateKey = (value: string) => {
+    Storage.set("googleApiKey", value)
+    this.setState({ googleApiKey: value })
   }
 
   render() {
     return (
       <>
+        <TranslateSection googleApiKey={this.state.googleApiKey} />
+        <hr />
         <Row>
           <Column>
-            <input
+            <TextInput
               value={this.state.googleApiKey}
               onChange={this.updateKey}
-              placeholder="Google API Key"
+              label="Google API Key"
             />
           </Column>
         </Row>
-        <TranslateSection googleApiKey={this.state.googleApiKey} />
       </>
     )
   }

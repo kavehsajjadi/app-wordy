@@ -40,6 +40,6 @@ html, body {
   }
 }
 
-.translate {
-  font-size: 2em;
+.translate .form-control {
+  font-size: 2rem;
 }
