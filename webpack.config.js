@@ -6,7 +6,8 @@ module.exports = {
   target: 'web',
   entry: "./src/main.tsx",
   output: {
-    publicPath: "https://kavehsajjadi.github.io/wordy/",
+    // publicPath: "https://kavehsajjadi.github.io/wordy/",
+    publicPath: "/",
     path: path.resolve(__dirname, "./build"),
     filename: "main.bundle.js",
   },
