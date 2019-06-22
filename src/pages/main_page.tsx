@@ -1,5 +1,5 @@
 import * as React from "react"
-import { WiktionaryClient } from "wiktionary_client"
+import { WiktionaryClient } from "services/wiktionary_client"
 import { match } from "react-router-dom"
 
 const searchClient = new WiktionaryClient()

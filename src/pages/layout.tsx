@@ -11,14 +11,6 @@ class Layout extends React.Component<LayoutProps, any> {
     return (
       <div className="layout">
         <div className="main">
-          <div className="container">
-            <div className="row">
-              <div className="col">
-                <nav className="navbar navbar-light bg-light">
-                </nav>
-              </div>
-            </div>
-          </div>
           <div className="container">{children}</div>
         </div>
       </div>
