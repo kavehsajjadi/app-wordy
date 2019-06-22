@@ -1,12 +1,12 @@
+import { LanguageInputList } from "components/language_input_list"
+import { TranslateSection } from "components/translate_section"
 import * as React from "react"
 import { match } from "react-router-dom"
-import { GoogleClient } from "services/google_client"
+import { Language } from "services/google_client"
 import { Storage } from "services/storage"
 import { Row } from "ui/row"
 import { Column } from "ui/column"
-import { TextArea } from "ui/textarea"
 import { TextInput } from "ui/textinput"
-import { debounce } from "util/debounce"
 
 type TranslateProps = {
   required: string
@@ -16,13 +16,7 @@ type TranslateProps = {
 
 type TranslateState = {
   googleApiKey: string
-}
-
-const LANGUAGES = {
-  en: { label: "English", code: "en" },
-  fa: { label: "Iranian", code: "fa" },
-  tr: { label: "Turkish", code: "tr" },
-  it: { label: "Italian", code: "it" },
+  languages: Language[]
 }
 
 export class TranslatePage extends React.Component<
@@ -31,22 +25,33 @@ export class TranslatePage extends React.Component<
 > {
   state = {
     googleApiKey: "",
+    languages: [],
   }
 
   componentDidMount() {
     const googleApiKey = Storage.get("googleApiKey")
-    if (googleApiKey) this.setState({ googleApiKey })
+    if (googleApiKey) {
+      this.setState({ googleApiKey })
+    }
   }
 
-  private readonly updateKey = (value: string) => {
-    Storage.set("googleApiKey", value)
-    this.setState({ googleApiKey: value })
+  private readonly updateKey = (googleApiKey: string) => {
+    Storage.set("googleApiKey", googleApiKey)
+    this.setState({ googleApiKey })
+  }
+
+  private readonly updateLanguages = (languages: Language[]) => {
+    Storage.set("languages", languages)
+    this.setState({ languages })
   }
 
   render() {
     return (
       <>
-        <TranslateSection googleApiKey={this.state.googleApiKey} />
+        <TranslateSection
+          googleApiKey={this.state.googleApiKey}
+          languages={this.state.languages}
+        />
         <hr />
         <Row>
           <Column>
@@ -57,117 +62,9 @@ export class TranslatePage extends React.Component<
             />
           </Column>
         </Row>
+        <hr />
+        <LanguageInputList onLanguagesChange={this.updateLanguages} />
       </>
-    )
-  }
-}
-
-type TranslateSectionProps = {
-  googleApiKey: string
-}
-type TranslateSectionState = {
-  en: string
-  fa: string
-  tr: string
-  it: string
-}
-class TranslateSection extends React.Component<
-  TranslateSectionProps,
-  TranslateSectionState
-> {
-  state = {
-    en: "",
-    fa: "",
-    tr: "",
-    it: "",
-  }
-
-  private readonly doTranslate = (value: string, from: string, to: string) => {
-    return GoogleClient.translate(
-      this.props.googleApiKey,
-      value,
-      from,
-      to,
-    ).catch(console.error)
-  }
-
-  private readonly translate = debounce(
-    (value: string, from: string, to: string[]) => {
-      for (let i = 0; i < to.length; i++) {
-        this.doTranslate(value, from, to[i]).then(text => {
-          // @ts-ignore
-          this.setState({ [to[i]]: text })
-        })
-      }
-    },
-    250,
-  )
-
-  private readonly onChange = (from: string, to: string[]) => (
-    value: string,
-  ) => {
-    // @ts-ignore
-    this.setState({ [from]: value })
-    // @ts-ignore
-    this.translate(value, from, to)
-  }
-
-  render() {
-    return (
-      <div className="translate">
-        <Row>
-          <Column>
-            <TextArea
-              onChange={this.onChange(LANGUAGES.en.code, [
-                LANGUAGES.fa.code,
-                LANGUAGES.tr.code,
-                LANGUAGES.it.code,
-              ])}
-              value={this.state[LANGUAGES.en.code]}
-              label={LANGUAGES.en.label}
-            />
-          </Column>
-        </Row>
-        <Row>
-          <Column>
-            <TextArea
-              onChange={this.onChange(LANGUAGES.fa.code, [
-                LANGUAGES.en.code,
-                LANGUAGES.tr.code,
-                LANGUAGES.it.code,
-              ])}
-              value={this.state[LANGUAGES.fa.code]}
-              label={LANGUAGES.fa.label}
-            />
-          </Column>
-        </Row>
-        <Row>
-          <Column>
-            <TextArea
-              onChange={this.onChange(LANGUAGES.tr.code, [
-                LANGUAGES.en.code,
-                LANGUAGES.fa.code,
-                LANGUAGES.it.code,
-              ])}
-              value={this.state[LANGUAGES.tr.code]}
-              label={LANGUAGES.tr.label}
-            />
-          </Column>
-        </Row>
-        <Row>
-          <Column>
-            <TextArea
-              onChange={this.onChange(LANGUAGES.it.code, [
-                LANGUAGES.en.code,
-                LANGUAGES.fa.code,
-                LANGUAGES.tr.code,
-              ])}
-              value={this.state[LANGUAGES.it.code]}
-              label={LANGUAGES.it.label}
-            />
-          </Column>
-        </Row>
-      </div>
     )
   }
 }
