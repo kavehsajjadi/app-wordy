@@ -1,4 +1,7 @@
 # Getting Started
+## URL
+https://kavehsajjadi.github.io/wordy/
+
 ## Development
 - `yarn dev`
 - `yarn storybook`
