@@ -50,6 +50,13 @@ export namespace Language {
     }
 
     @action
+    removeLanguage(language: T) {
+      if (this.languages.get(language.code)) {
+        this.languages.delete(language.code)
+      }
+    }
+
+    @action
     setLanguage(opts: T) {
       if (opts.label && opts.code && opts.code.length === 2) {
         const lang = LanguageProto.serialize(opts)

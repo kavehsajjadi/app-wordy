@@ -52,6 +52,15 @@ export class TranslatePage extends React.Component<
 
   private readonly updateLanguage = (language: Language.T) => {
     languageStore.setLanguage(language)
+    this.syncLanguagesToLocalStorage()
+  }
+
+  private readonly removeLanguage = (language: Language.T) => {
+    languageStore.removeLanguage(language)
+    this.syncLanguagesToLocalStorage()
+  }
+
+  private readonly syncLanguagesToLocalStorage = () => {
     Storage.set("languages", JSON.stringify(languageStore.languageEntries))
   }
 
@@ -62,6 +71,7 @@ export class TranslatePage extends React.Component<
         onGoogleApiKeyChange={this.updateKey}
         languages={languageStore.languageList}
         onLanguageChange={this.updateLanguage}
+        onLanguageRemove={this.removeLanguage}
       />
     )
   }
@@ -72,6 +82,7 @@ const TranslatePageView = ({
   languages,
   onGoogleApiKeyChange,
   onLanguageChange,
+  onLanguageRemove,
 }) => (
   <>
     <TranslateSection googleApiKey={googleApiKey} languages={languages} />
@@ -89,6 +100,7 @@ const TranslatePageView = ({
     <LanguageInputList
       languages={languages}
       onLanguageChange={onLanguageChange}
+      onLanguageRemove={onLanguageRemove}
     />
   </>
 )

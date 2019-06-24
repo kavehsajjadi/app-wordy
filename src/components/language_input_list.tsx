@@ -3,6 +3,7 @@ import { LanguageInput } from "components/language_input"
 import { Language } from "stores/language_store"
 
 type LanguageInputListProps = {
+  onLanguageRemove?(language: Language.T): void
   onLanguageChange?(language: Language.T): void
   languages: Language.T[]
 }
@@ -15,7 +16,7 @@ export class LanguageInputList extends React.Component<LanguageInputListProps> {
   }
 
   render() {
-    const { languages } = this.props
+    const { languages, onLanguageRemove } = this.props
 
     return (
       <div>
@@ -25,6 +26,7 @@ export class LanguageInputList extends React.Component<LanguageInputListProps> {
               key={language.code}
               language={language}
               onChange={this.onChange}
+              onRemove={onLanguageRemove}
             />
           ))}
         <span>Add New</span>

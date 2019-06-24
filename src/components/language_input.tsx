@@ -1,10 +1,12 @@
 import * as React from "react"
 import { Language } from "stores/language_store"
+import { BlockButton } from "ui/buttons"
 import { TextInput } from "ui/textinput"
 
 type LanguageInputProps = {
   language: Language.T
   onChange?(language: Language.T): void
+  onRemove?(language: Language.T): void
 }
 
 type LanguageInputState = {
@@ -36,6 +38,15 @@ export class LanguageInput extends React.Component<LanguageInputProps> {
     this.setState({ label })
   }
 
+  private readonly removeLanguage = () => {
+    if (this.props.onRemove) {
+      this.props.onRemove({
+        code: this.state.code,
+        label: this.state.label,
+      })
+    }
+  }
+
   render() {
     const { code, label } = this.state
 
@@ -43,6 +54,11 @@ export class LanguageInput extends React.Component<LanguageInputProps> {
       <div>
         <TextInput value={code} label="Code" onChange={this.updateCode} />
         <TextInput value={label} label="Label" onChange={this.updateLabel} />
+        {this.props.onRemove && (
+          <BlockButton onClick={this.removeLanguage}>
+            Remove "{code}"
+          </BlockButton>
+        )}
       </div>
     )
   }
