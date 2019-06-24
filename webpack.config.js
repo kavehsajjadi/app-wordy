@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin")
 const RemoveServiceWorkerPlugin = require("webpack-remove-serviceworker-plugin")
 
 module.exports = {
-  target: 'web',
+  target: "web",
   entry: "./src/main.tsx",
   output: {
     // publicPath: "https://kavehsajjadi.github.io/wordy/",

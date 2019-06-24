@@ -1,10 +1,5 @@
 import * as he from "he"
 
-export type Language = {
-  code: string
-  label: string
-}
-
 export class GoogleClient {
   static translate(
     key: string,

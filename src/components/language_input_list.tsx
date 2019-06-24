@@ -1,59 +1,26 @@
 import * as React from "react"
 import { LanguageInput } from "components/language_input"
-import { Language } from "services/google_client"
+import { Language } from "stores/language_store"
 
 type LanguageInputListProps = {
-  onLanguagesChange?(languages: Language[]): void
+  onLanguageChange?(language: Language.T): void
+  languages: Language.T[]
 }
 
-type LanguageInputListState = {
-  languages: { [key: string]: Language }
-}
-
-export class LanguageInputList extends React.Component<
-  LanguageInputListProps,
-  LanguageInputListState
-> {
-  state = {
-    languages: {},
-  }
-
-  private readonly maybeCallOnUpdateLanguages = (
-    state: LanguageInputListState,
-  ) => {
-    const { onLanguagesChange } = this.props
-    const { languages } = this.state
-    const languageList = Object.keys(languages).map(key => languages[key])
-
-    if (onLanguagesChange && languageList.length) {
-      onLanguagesChange(languageList)
+export class LanguageInputList extends React.Component<LanguageInputListProps> {
+  private readonly onChange = (language: Language.T) => {
+    if (this.props.onLanguageChange) {
+      this.props.onLanguageChange(language)
     }
   }
 
-  private readonly onChange = (language: Language) => {
-    this.setState(state => {
-      const newState = {
-        ...state,
-        languages: {
-          ...state.languages,
-          [language.code]: language,
-        },
-      }
-
-      this.maybeCallOnUpdateLanguages(newState)
-
-      return newState
-    })
-  }
-
   render() {
-    const { languages } = this.state
-    const languageList = Object.keys(languages).map(key => languages[key])
+    const { languages } = this.props
 
     return (
       <div>
-        {languageList.length > 0 &&
-          languageList.map(language => (
+        {languages.length > 0 &&
+          languages.map(language => (
             <LanguageInput
               key={language.code}
               language={language}

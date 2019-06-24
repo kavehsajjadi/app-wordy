@@ -1,10 +1,10 @@
 import * as React from "react"
-import { Language } from "services/google_client"
+import { Language } from "stores/language_store"
 import { TextInput } from "ui/textinput"
 
 type LanguageInputProps = {
-  language: Language
-  onChange?(language: Language): void
+  language: Language.T
+  onChange?(language: Language.T): void
 }
 
 type LanguageInputState = {
@@ -38,6 +38,7 @@ export class LanguageInput extends React.Component<LanguageInputProps> {
 
   render() {
     const { code, label } = this.state
+
     return (
       <div>
         <TextInput value={code} label="Code" onChange={this.updateCode} />

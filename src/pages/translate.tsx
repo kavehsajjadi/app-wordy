@@ -1,12 +1,16 @@
 import { LanguageInputList } from "components/language_input_list"
 import { TranslateSection } from "components/translate_section"
+import { observer } from "mobx-react"
+import { autorun, toJS } from "mobx"
 import * as React from "react"
 import { match } from "react-router-dom"
-import { Language } from "services/google_client"
 import { Storage } from "services/storage"
+import { Language } from "stores/language_store"
 import { Row } from "ui/row"
 import { Column } from "ui/column"
 import { TextInput } from "ui/textinput"
+
+const languageStore = new Language.Store()
 
 type TranslateProps = {
   required: string
@@ -16,20 +20,26 @@ type TranslateProps = {
 
 type TranslateState = {
   googleApiKey: string
-  languages: Language[]
 }
 
+@observer
 export class TranslatePage extends React.Component<
   TranslateProps,
   TranslateState
 > {
   state = {
     googleApiKey: "",
-    languages: [],
   }
 
   componentDidMount() {
     const googleApiKey = Storage.get("googleApiKey")
+    const languagesJson = Storage.get("languages")
+
+    if (languagesJson) {
+      const languages = Language.createFromJson(languagesJson)
+      languageStore.setLanguages(languages)
+    }
+
     if (googleApiKey) {
       this.setState({ googleApiKey })
     }
@@ -40,31 +50,45 @@ export class TranslatePage extends React.Component<
     this.setState({ googleApiKey })
   }
 
-  private readonly updateLanguages = (languages: Language[]) => {
-    Storage.set("languages", languages)
-    this.setState({ languages })
+  private readonly updateLanguage = (language: Language.T) => {
+    languageStore.setLanguage(language)
+    Storage.set("languages", JSON.stringify(languageStore.languageEntries))
   }
 
   render() {
     return (
-      <>
-        <TranslateSection
-          googleApiKey={this.state.googleApiKey}
-          languages={this.state.languages}
-        />
-        <hr />
-        <Row>
-          <Column>
-            <TextInput
-              value={this.state.googleApiKey}
-              onChange={this.updateKey}
-              label="Google API Key"
-            />
-          </Column>
-        </Row>
-        <hr />
-        <LanguageInputList onLanguagesChange={this.updateLanguages} />
-      </>
+      <View
+        googleApiKey={this.state.googleApiKey}
+        onGoogleApiKeyChange={this.updateKey}
+        languages={languageStore.languageList}
+        onLanguageChange={this.updateLanguage}
+      />
     )
   }
 }
+
+const View = ({
+  googleApiKey,
+  languages,
+  onGoogleApiKeyChange,
+  onLanguageChange,
+}) => (
+  <>
+    <TranslateSection googleApiKey={googleApiKey} languages={languages} />
+    <hr />
+    <Row>
+      <Column>
+        <TextInput
+          label="Google API Key"
+          value={googleApiKey}
+          onChange={onGoogleApiKeyChange}
+        />
+      </Column>
+    </Row>
+    <hr />
+    <LanguageInputList
+      languages={languages}
+      onLanguageChange={onLanguageChange}
+    />
+  </>
+)
