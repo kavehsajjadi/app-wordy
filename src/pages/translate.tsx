@@ -1,7 +1,7 @@
 import { LanguageInputList } from "components/language_input_list"
 import { TranslateSection } from "components/translate_section"
 import { observer } from "mobx-react"
-import { autorun, toJS } from "mobx"
+import { toJS } from "mobx"
 import * as React from "react"
 import { match } from "react-router-dom"
 import { Storage } from "services/storage"
@@ -57,7 +57,7 @@ export class TranslatePage extends React.Component<
 
   render() {
     return (
-      <View
+      <TranslatePageView
         googleApiKey={this.state.googleApiKey}
         onGoogleApiKeyChange={this.updateKey}
         languages={languageStore.languageList}
@@ -67,7 +67,7 @@ export class TranslatePage extends React.Component<
   }
 }
 
-const View = ({
+const TranslatePageView = ({
   googleApiKey,
   languages,
   onGoogleApiKeyChange,
