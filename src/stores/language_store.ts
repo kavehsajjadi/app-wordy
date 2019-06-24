@@ -12,7 +12,30 @@ export namespace Language {
 
   export function createFromJson(languageArrayJson: string): T[] {
     const arr = JSON.parse(languageArrayJson)
-    return arr.map((entry: [string, T]) => entry[1])
+    return arr.map((entry: [string, T]) => {
+      const lang = LanguageProto.serialize(entry[1])
+      return LanguageProto.deserialize(lang)
+    })
+  }
+
+  export class LanguageProto {
+    readonly code: LanguageCode
+    readonly label: string
+
+    constructor(opts: T) {
+      this.code = opts.code
+      this.label = opts.label
+    }
+
+    static serialize(obj: T): LanguageProto {
+      const code = obj.code.toLowerCase()
+      const label = obj.label
+      return new LanguageProto({ code, label })
+    }
+
+    static deserialize(klass: LanguageProto): T {
+      return { code: klass.code, label: klass.label }
+    }
   }
 
   export class Store {
@@ -27,9 +50,10 @@ export namespace Language {
     }
 
     @action
-    setLanguage(language: T) {
-      if (language.label && language.code && language.code.length === 2) {
-        this.languages.set(language.code, language)
+    setLanguage(opts: T) {
+      if (opts.label && opts.code && opts.code.length === 2) {
+        const lang = LanguageProto.serialize(opts)
+        this.languages.set(lang.code, LanguageProto.deserialize(lang))
       }
     }
 
