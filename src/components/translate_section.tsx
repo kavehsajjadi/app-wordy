@@ -6,7 +6,8 @@ import { Language } from "stores/language_store"
 import { Row } from "ui/row"
 import { Column } from "ui/column"
 import { TextArea } from "ui/textarea"
-import { debounce } from "util/debounce"
+import { callWithDelay } from "util/debounce"
+import "./translate_section.css"
 
 type TranslateSectionProps = {
   googleApiKey: string
@@ -20,6 +21,11 @@ const translations: ObservableMap<
 
 @observer
 export class TranslateSection extends React.Component<TranslateSectionProps> {
+  delay = 300
+  state = {
+    loading: false,
+  }
+
   private readonly doTranslate = (
     value: string,
     from: string,
@@ -42,16 +48,30 @@ export class TranslateSection extends React.Component<TranslateSectionProps> {
     })
   }
 
-  private readonly debouncedTranslate = debounce(this.translate, 250)
+  private readonly debouncedTranslate = callWithDelay(
+    this.translate,
+    this.delay,
+  )
+
+  private readonly debouncedFinishLoading = callWithDelay(
+    () => this.setState({ loading: false }),
+    this.delay,
+  )
 
   private readonly onChange = (from: string) => (value: string) => {
+    this.setState({ loading: true })
     translations.set(from, value)
     const targetLanguages = this.props.languages.map(language => language.code)
     // @ts-ignore
-    this.debouncedTranslate(value, from, targetLanguages)
+    this.debouncedTranslate(value, from, targetLanguages).then(
+      // todo this is the opposite behaviour - always fires after the minimum time
+      // we want to fire when it resolves with a minimum (if it takes longer it should)
+      this.debouncedFinishLoading,
+    )
   }
 
   render() {
+    const { loading } = this.state
     return (
       <div className="translate">
         {this.props.languages.map(language => {
@@ -62,6 +82,7 @@ export class TranslateSection extends React.Component<TranslateSectionProps> {
               language={language}
               onChange={this.onChange(language.code)}
               value={value}
+              loading={loading}
             />
           )
         })}
@@ -70,12 +91,25 @@ export class TranslateSection extends React.Component<TranslateSectionProps> {
   }
 }
 
-const TranslateSectionView = ({ language, value, onChange }) => {
+const TranslateSectionView = ({ language, value, onChange, loading }) => {
   return (
     <Row key={language.code}>
       <Column>
+        {loading && <Loading />}
         <TextArea onChange={onChange} value={value} label={language.label} />
       </Column>
     </Row>
   )
 }
+
+const Loading = () => (
+  <div className="loading">
+    <Spinner />
+  </div>
+)
+
+const Spinner = delay => (
+  <div className="spinner-border spinner-border-sm" role="status">
+    <span className="sr-only">Loading...</span>
+  </div>
+)

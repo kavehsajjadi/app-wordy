@@ -13,3 +13,14 @@ export function debounce(func, wait, immediate = false) {
     if (callNow) func.apply(context, args)
   }
 }
+
+export function callWithDelay(fn, delay) {
+  let timeout = null
+
+  return (...params) => {
+    clearTimeout(timeout)
+    return new Promise(resolve => {
+      timeout = setTimeout(() => resolve(fn(...params)), delay)
+    })
+  }
+}
