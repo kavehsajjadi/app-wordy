@@ -11,6 +11,7 @@
     "dev": "webpack-dev-server --mode=development",
     "test": "jest",
     "test:watch": "jest --watch",
+    "lint:watch": "tsc --noEmit -w",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "author": "",
