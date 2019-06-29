@@ -1,0 +1,9 @@
+@value paddingUnit: 4px;
+
+@value basePadding: calc(4 * paddingUnit);
+
+@value marginUnit: 8px;
+
+@value baseMargin: calc(3 * marginUnit);
+
+@value gridUnit: 4px;

@@ -4,7 +4,6 @@ import { Router, Route, Switch } from "react-router-dom"
 import { routes } from "config/routes"
 import { history } from "config/history"
 import { Layout } from "pages/layout"
-import "./main.css"
 
 class Main extends React.Component {
   render() {

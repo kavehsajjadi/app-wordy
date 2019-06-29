@@ -1,0 +1,4 @@
+.full-page-container {
+  width: calc(100vw - 54px);
+  height: calc(100vh - 54px);
+}

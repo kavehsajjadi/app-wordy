@@ -1,8 +1,3 @@
-/* Built ontop of bootstrap */
-html, body {
-	font-family: 'Lateef', 'Open Sans', sans-serif;
-}
-
 .layout {
   width: 100%;
   height: 100vh;
@@ -38,8 +33,4 @@ html, body {
   .col-sidebar {
     max-width: 250px;
   }
-}
-
-.translate .form-control {
-  font-size: 2rem;
 }

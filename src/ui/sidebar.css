@@ -1,0 +1,8 @@
+@value gridUnit, basePadding from 'ui/theme.css';
+
+
+.sidebar {
+  width: sidebarWidth;
+  height: 100%;
+  padding: basePadding;
+}

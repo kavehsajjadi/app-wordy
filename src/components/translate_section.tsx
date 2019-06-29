@@ -7,7 +7,7 @@ import { Row } from "ui/row"
 import { Column } from "ui/column"
 import { TextArea } from "ui/textarea"
 import { callWithDelay } from "util/debounce"
-import "./translate_section.css"
+import styles from "./translate_section.css"
 
 type TranslateSectionProps = {
   googleApiKey: string
@@ -73,7 +73,7 @@ export class TranslateSection extends React.Component<TranslateSectionProps> {
   render() {
     const { loading } = this.state
     return (
-      <div className="translate">
+      <>
         {this.props.languages.map(language => {
           const value = translations.get(language.code)
           return (
@@ -86,7 +86,7 @@ export class TranslateSection extends React.Component<TranslateSectionProps> {
             />
           )
         })}
-      </div>
+      </>
     )
   }
 }
@@ -96,14 +96,19 @@ const TranslateSectionView = ({ language, value, onChange, loading }) => {
     <Row key={language.code}>
       <Column>
         {loading && <Loading />}
-        <TextArea onChange={onChange} value={value} label={language.label} />
+        <TextArea
+          inputClassName={styles.textarea}
+          onChange={onChange}
+          value={value}
+          label={language.label}
+        />
       </Column>
     </Row>
   )
 }
 
 const Loading = () => (
-  <div className="loading">
+  <div className={styles.loading}>
     <Spinner />
   </div>
 )
