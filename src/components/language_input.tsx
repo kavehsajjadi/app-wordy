@@ -1,7 +1,10 @@
 import * as React from "react"
 import { Language } from "stores/language_store"
-import { BlockButton } from "ui/buttons"
+import { Button } from "ui/buttons"
 import { TextInput } from "ui/textinput"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTimes } from "@fortawesome/free-solid-svg-icons"
+import styles from "./language_input.css"
 
 type LanguageInputProps = {
   language: Language.T
@@ -51,13 +54,19 @@ export class LanguageInput extends React.Component<LanguageInputProps> {
     const { code, label } = this.state
 
     return (
-      <div>
-        <TextInput value={code} label="Code" onChange={this.updateCode} />
-        <TextInput value={label} label="Label" onChange={this.updateLabel} />
+      <div className={styles.container}>
+        <div className={styles.row}>
+          <TextInput value={code} label="Code" onChange={this.updateCode} />
+        </div>
+        <div className={styles.row}>
+          <TextInput value={label} label="Label" onChange={this.updateLabel} />
+        </div>
         {this.props.onRemove && (
-          <BlockButton onClick={this.removeLanguage}>
-            Remove "{code}"
-          </BlockButton>
+          <div className={styles.row}>
+            <Button onClick={this.removeLanguage}>
+              <FontAwesomeIcon size="lg" icon={faTimes} />
+            </Button>
+          </div>
         )}
       </div>
     )

@@ -9,6 +9,8 @@ import { Language } from "stores/language_store"
 import { Row } from "ui/row"
 import { Column } from "ui/column"
 import { TextInput } from "ui/textinput"
+import { Sidebar } from "ui/sidebar"
+import { Main } from "ui/main"
 
 const languageStore = new Language.Store()
 
@@ -85,22 +87,25 @@ const TranslatePageView = ({
   onLanguageRemove,
 }) => (
   <>
-    <TranslateSection googleApiKey={googleApiKey} languages={languages} />
-    <hr />
-    <Row>
-      <Column>
-        <TextInput
-          label="Google API Key"
-          value={googleApiKey}
-          onChange={onGoogleApiKeyChange}
-        />
-      </Column>
-    </Row>
-    <hr />
-    <LanguageInputList
-      languages={languages}
-      onLanguageChange={onLanguageChange}
-      onLanguageRemove={onLanguageRemove}
-    />
+    <Sidebar>
+      <Row>
+        <Column>
+          <TextInput
+            label="Google API Key"
+            value={googleApiKey}
+            onChange={onGoogleApiKeyChange}
+          />
+        </Column>
+      </Row>
+      <hr />
+      <LanguageInputList
+        languages={languages}
+        onLanguageChange={onLanguageChange}
+        onLanguageRemove={onLanguageRemove}
+      />
+    </Sidebar>
+    <Main>
+      <TranslateSection googleApiKey={googleApiKey} languages={languages} />
+    </Main>
   </>
 )

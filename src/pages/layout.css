@@ -1,18 +1,12 @@
 .layout {
   width: 100%;
   height: 100vh;
+}
+
+.container {
   display: flex;
-}
-
-.sidebar {
-  flex: 250px 0 0;
-  background: var(--light);
-  border-right: 1px solid var(--dark);
-}
-
-.main {
-  flex: 1;
-  overflow-y: auto;
+  height: 100%;
+  width: 100%;
 }
 
 .row {

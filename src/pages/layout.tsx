@@ -1,5 +1,4 @@
 import * as React from "react"
-import { Sidebar } from "ui/sidebar"
 import styles from "./layout.css"
 
 type LayoutProps = {
@@ -12,12 +11,7 @@ class Layout extends React.Component<LayoutProps, any> {
 
     return (
       <div className={styles.layout}>
-        <div className={styles.main}>
-          <div>
-            <Sidebar />
-          </div>
-          <div className={styles.container}>{children}</div>
-        </div>
+        <div className={styles.container}>{children}</div>
       </div>
     )
   }

@@ -1,0 +1,10 @@
+@value basePadding, marginUnit from 'ui/theme.css';
+
+.container {
+  position: relative;
+  padding: basePadding;
+}
+
+.row {
+  margin: 0 0 marginUnit;
+}

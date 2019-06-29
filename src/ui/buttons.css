@@ -1,0 +1,11 @@
+@value gridUnit from 'ui/theme.css';
+
+@value minimumLength: calc(10 * gridUnit);
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: minimumLength;
+  min-height: minimumLength;
+}

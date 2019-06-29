@@ -17,5 +17,11 @@ type SidebarViewProps = {
 }
 
 export const SidebarView = ({ children, open }: SidebarViewProps) => (
-  <div className={styles.sidebar}>{children}</div>
+  <div
+    className={`${styles.sidebar} ${
+      open ? styles.sidebarOpen : styles.sidebarClosed
+    }`}
+  >
+    <div className={styles.wrapper}>{children}</div>
+  </div>
 )

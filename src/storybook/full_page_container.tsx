@@ -5,4 +5,4 @@ export const FullPageContainer = ({
   children,
 }: {
   children: React.ReactNode
-}) => <div className="styles.fullPageContainer">{children}</div>
+}) => <div className={styles.fullPageContainer}>{children}</div>
