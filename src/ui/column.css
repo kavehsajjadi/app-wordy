@@ -1,0 +1,5 @@
+@value basePadding from 'ui/theme.css';
+
+.column {
+  padding: 0 calc(basePadding / 2);
+}

@@ -72,20 +72,22 @@ export class TranslateSection extends React.Component<TranslateSectionProps> {
 
   render() {
     const { loading } = this.state
+
     return (
       <>
-        {this.props.languages.map(language => {
-          const value = translations.get(language.code)
-          return (
-            <TranslateSectionView
-              key={language.code}
-              language={language}
-              onChange={this.onChange(language.code)}
-              value={value}
-              loading={loading}
-            />
-          )
-        })}
+        {this.props.languages.length > 0 &&
+          this.props.languages.map(language => {
+            const value = translations.get(language.code)
+            return (
+              <TranslateSectionView
+                key={language.code}
+                language={language}
+                onChange={this.onChange(language.code)}
+                value={value}
+                loading={loading}
+              />
+            )
+          })}
       </>
     )
   }
@@ -93,17 +95,15 @@ export class TranslateSection extends React.Component<TranslateSectionProps> {
 
 const TranslateSectionView = ({ language, value, onChange, loading }) => {
   return (
-    <Row key={language.code}>
-      <Column>
-        {loading && <Loading />}
-        <TextArea
-          inputClassName={styles.textarea}
-          onChange={onChange}
-          value={value}
-          label={language.label}
-        />
-      </Column>
-    </Row>
+    <div key={language.code} className={styles.container}>
+      {loading && <Loading />}
+      <TextArea
+        inputClassName={styles.textarea}
+        onChange={onChange}
+        value={value}
+        label={language.label}
+      />
+    </div>
   )
 }
 

@@ -2,7 +2,7 @@
 
 .container {
   position: relative;
-  padding: basePadding;
+  padding: basePadding 0;
 }
 
 .row {

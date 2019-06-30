@@ -1,17 +1,17 @@
 export class Storage {
-  static set(key, value) {
+  set(key, value) {
     localStorage.setItem(key, value)
   }
 
-  static get(key) {
+  get(key) {
     return localStorage.getItem(key)
   }
 
-  static remove(key) {
+  remove(key) {
     localStorage.removeItem(key)
   }
 
-  static clear() {
+  clear() {
     localStorage.clear()
   }
 }

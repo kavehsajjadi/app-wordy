@@ -1,6 +1,6 @@
 @value basePadding from 'ui/theme.css';
 
 .container {
-  padding: basePadding;
+  padding: basePadding 0;
   flex: 1;
 }

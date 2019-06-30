@@ -1,4 +1,5 @@
-import { action, observable } from "mobx"
+import * as mobx from "mobx"
+import { Storage } from "services/storage"
 
 export namespace Language {
   export type LanguageCode = string
@@ -38,34 +39,53 @@ export namespace Language {
     }
   }
 
-  export class Store {
-    @observable languages: Map<LanguageCode, T> = new Map()
+  export class LanguageStore {
+    storage: Storage
+    @mobx.observable languages: Map<LanguageCode, T>
 
-    get languageEntries(): Entries {
-      return Array.from(this.languages.entries())
-    }
+    constructor({ storage }: { storage: Storage }) {
+      this.storage = storage
+      this.languages = new Map()
 
-    get languageList(): T[] {
-      return Array.from(this.languages.entries()).map(entry => entry[1])
-    }
-
-    @action
-    removeLanguage(language: T) {
-      if (this.languages.get(language.code)) {
-        this.languages.delete(language.code)
+      const languagesJson = this.storage.get("languages")
+      if (languagesJson) {
+        const languages = Language.createFromJson(languagesJson)
+        this.setLanguages(languages)
       }
     }
 
-    @action
-    setLanguage(opts: T) {
+    getLanguageEntries = (): Entries => {
+      return Array.from(this.languages.entries())
+    }
+
+    getLanguageList = (): T[] => {
+      return Array.from(this.languages.entries()).map(entry => entry[1])
+    }
+
+    syncLanguagesToLocalStorage = () => {
+      const data = this.getLanguageEntries()
+      this.storage.set("languages", JSON.stringify(data))
+    }
+
+    @mobx.action
+    removeLanguage = (language: T) => {
+      if (this.languages.get(language.code)) {
+        this.languages.delete(language.code)
+      }
+      this.syncLanguagesToLocalStorage()
+    }
+
+    @mobx.action
+    setLanguage = (opts: T) => {
       if (opts.label && opts.code && opts.code.length === 2) {
         const lang = LanguageProto.serialize(opts)
         this.languages.set(lang.code, LanguageProto.deserialize(lang))
       }
+      this.syncLanguagesToLocalStorage()
     }
 
-    @action
-    setLanguages(languages: T[]) {
+    @mobx.action
+    setLanguages = (languages: T[]) => {
       for (let i = 0; i < languages.length; i++) {
         const l = languages[i]
         this.languages.set(l.code, l)

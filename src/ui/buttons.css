@@ -7,5 +7,20 @@
   justify-content: center;
   align-items: center;
   min-width: minimumLength;
-  min-height: minimumLength;
+  height: minimumLength;
 }
+
+.sm {
+  min-width: calc(0.9 * minimumLength);
+  height: calc(0.9 * minimumLength);
+}
+
+.lg {
+  min-width: calc(1.25 * minimumLength);
+  height: calc(1.25 * minimumLength);
+}
+
+.roundButton {
+  border-radius: 100%;
+}
+

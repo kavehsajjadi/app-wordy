@@ -1,5 +1,5 @@
 import { MainPage } from "pages/main_page"
-import { TranslatePage } from "pages/translate"
+import { TranslatePage } from "pages/translate_page/main"
 
 export const routes = [
   {

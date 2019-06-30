@@ -1,0 +1,38 @@
+@value gridUnit, baseMargin, basePadding from 'ui/theme.css';
+
+@value lightColor, darkColor from 'ui/theme.css';
+
+@value sidebarWidth: calc(75 * gridUnit);
+
+.sidebar {
+  height: 100%;
+  background: lightColor;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarHeader {
+  display: flex;
+  justify-content: flex-end;
+  padding: basePadding calc(basePadding / 2) calc(basePadding / 2);
+}
+
+.wrapper {
+  padding: calc(basePadding / 2) calc(basePadding / 2) basePadding;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.sidebarOpen {
+  width: sidebarWidth;
+  flex: sidebarWidth 0 0;
+}
+
+.sidebarClosed {
+  width: 0;
+  min-width: 0;
+  flex: 0 0 0;
+  overflow: hidden;
+  visibility: hidden;
+}
