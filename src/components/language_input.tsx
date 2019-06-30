@@ -50,24 +50,32 @@ export class LanguageInput extends React.Component<LanguageInputProps> {
 
   render() {
     const { code, label } = this.state
+    const disabled = !this.props.onChange
 
     return (
       <div className={`input-group ${styles.container}`}>
         <TextInput
+          inputClassName={styles.codeInput}
           value={code}
           label="Code"
           onChange={this.updateCode}
           type="field"
           length={2}
+          disabled={disabled}
+          placeholder="e.g. 'en'"
         />
         <TextInput
           value={label}
           label="Label"
           onChange={this.updateLabel}
           type="field"
+          disabled={disabled}
+          placeholder="e.g. 'English'"
         />
         {this.props.onRemove && (
-          <CloseButton onClick={this.removeLanguage} size="sm" />
+          <div className={styles.buttonWrapper}>
+            <CloseButton onClick={this.removeLanguage} size="sm" />
+          </div>
         )}
       </div>
     )

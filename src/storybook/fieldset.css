@@ -1,0 +1,16 @@
+.fieldset {
+  position: relative;
+  margin: 2em 0;
+  border-top: 1px dashed #0028ff2b;
+  border-bottom: 1px dashed #0028ff2b;
+}
+
+.legend {
+  display: inline;
+  position: absolute;
+  width: auto;
+  transform: translateY(-100%);
+  font-size: 12px;
+  background: #0028ff08;
+  padding: 2px 5px;
+}

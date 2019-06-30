@@ -1,4 +1,15 @@
 .fullPageContainer {
-  width: calc(100vw - 54px);
-  height: calc(100vh - 54px);
+  width: calc(100vw - 30px);
+  height: calc(100vh - 30px);
+}
+
+.fullPageColumnContainer {
+  display: flex;
+  width: calc(100vw - 30px);
+  height: calc(100vh - 30px);
+}
+
+.narrowColumn {
+  height: 100%;
+  border-right: 1px dashed #0028ff2b;
 }

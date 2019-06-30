@@ -6,3 +6,21 @@ export const FullPageContainer = ({
 }: {
   children: React.ReactNode
 }) => <div className={styles.fullPageContainer}>{children}</div>
+
+export const FullPageColumnContainer = ({
+  children,
+}: {
+  children: React.ReactNode
+}) => <div className={styles.fullPageColumnContainer}>{children}</div>
+
+export const NarrowColumn = ({
+  children,
+  width = 300,
+}: {
+  children: React.ReactNode
+  width?: number
+}) => (
+  <div style={{ width }} className={styles.narrowColumn}>
+    {children}
+  </div>
+)

@@ -1,10 +1,15 @@
-@value basePadding, marginUnit from 'ui/theme.css';
+@value marginUnit from 'ui/theme.css';
 
 .container {
   position: relative;
-  padding: basePadding 0;
+  margin: 0 0 marginUnit;
 }
 
-.row {
-  margin: 0 0 marginUnit;
+.buttonWrapper {
+  margin: 0 0 0 calc(marginUnit / 2);
+}
+
+.codeInput {
+  width: 50px !important;
+  flex: 50px 0 0 !important;
 }

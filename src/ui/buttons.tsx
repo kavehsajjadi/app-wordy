@@ -1,4 +1,5 @@
 import * as React from "react"
+import { classnames } from "util/classnames"
 import styles from "./buttons.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons"
@@ -30,13 +31,16 @@ export const BlockButton = ({ children, onClick }: ButtonProps) => (
     {children}
   </button>
 )
-
 export const OutlineButton = ({ children, onClick, size }: ButtonProps) => (
   <button
     type="button"
-    className={`btn btn-outline-primary ${styles.button} ${
-      styles.roundButton
-    } ${size ? styles[size] : ""}`}
+    className={classnames({
+      ["btn"]: true,
+      ["btn-outline-primary"]: true,
+      [styles.button]: true,
+      [styles.roundButton]: true,
+      [styles[size]]: size != null,
+    })}
     onClick={onClick}
   >
     {children}
