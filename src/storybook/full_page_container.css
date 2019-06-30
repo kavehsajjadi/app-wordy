@@ -12,4 +12,10 @@
 .narrowColumn {
   height: 100%;
   border-right: 1px dashed #0028ff2b;
+  border-left: 1px dashed #0028ff2b;
+  margin: 0 10px 0 0;
+}
+
+.narrowColumn:first-child {
+  border-left: none;
 }
