@@ -14,11 +14,13 @@
 .sidebarHeader {
   display: flex;
   justify-content: flex-end;
-  padding: basePadding calc(basePadding / 2) calc(basePadding / 2);
+  padding: calc(basePadding / 1.5) 0;
+  margin: 0 calc(basePadding / 2);
+  border-bottom: 1px solid #e1e1e1;
 }
 
 .wrapper {
-  padding: calc(basePadding / 2) calc(basePadding / 2) basePadding;
+  padding: calc(basePadding / 1.5) calc(basePadding / 2) basePadding;
   flex: 1;
   min-height: 0;
   overflow-y: auto;

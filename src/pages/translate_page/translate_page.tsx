@@ -18,15 +18,11 @@ export const TranslatePage = ({
 }) => (
   <>
     <Sidebar>
-      <Row>
-        <Column>
-          <TextInput
-            label="Google API Key"
-            value={googleApiKey}
-            onChange={onGoogleApiKeyChange}
-          />
-        </Column>
-      </Row>
+      <TextInput
+        label="Google API Key"
+        value={googleApiKey}
+        onChange={onGoogleApiKeyChange}
+      />
       <hr />
       <LanguageInputList
         languages={languages}
