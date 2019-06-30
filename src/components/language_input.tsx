@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Language } from "stores/language_store"
 import { TextInput } from "ui/textinput"
-import { CloseButton } from "ui/buttons"
+import { AddButton, MinusButton } from "ui/buttons"
 import styles from "./language_input.css"
 
 type LanguageInputProps = {
@@ -62,7 +62,7 @@ export class LanguageInput extends React.Component<LanguageInputProps> {
           type="field"
           length={2}
           disabled={disabled}
-          placeholder="e.g. 'en'"
+          placeholder="'en'"
         />
         <TextInput
           value={label}
@@ -70,13 +70,69 @@ export class LanguageInput extends React.Component<LanguageInputProps> {
           onChange={this.updateLabel}
           type="field"
           disabled={disabled}
-          placeholder="e.g. 'English'"
+          placeholder="'English'"
         />
         {this.props.onRemove && (
           <div className={styles.buttonWrapper}>
-            <CloseButton onClick={this.removeLanguage} size="sm" />
+            <MinusButton onClick={this.removeLanguage} size="sm" />
           </div>
         )}
+      </div>
+    )
+  }
+}
+
+type NewLanguageInputProps = {
+  onClick(language: Language.T): void
+}
+
+export class NewLanguageInput extends React.Component<NewLanguageInputProps> {
+  state = {
+    code: "",
+    label: "",
+  }
+
+  private readonly updateCode = (code: string) => {
+    this.setState({ code })
+  }
+
+  private readonly updateLabel = (label: string) => {
+    this.setState({ label })
+  }
+
+  private readonly maybeOnClick = () => {
+    const { code, label } = this.state
+
+    if (code && code.length === 2 && label && this.props.onClick) {
+      this.props.onClick({ code, label })
+      this.setState({ code: "", label: "" })
+    }
+  }
+
+  render() {
+    const { code, label } = this.state
+
+    return (
+      <div className={`input-group ${styles.container}`}>
+        <TextInput
+          inputClassName={styles.codeInput}
+          value={code}
+          label="Code"
+          onChange={this.updateCode}
+          type="field"
+          length={2}
+          placeholder="'en'"
+        />
+        <TextInput
+          value={label}
+          label="Label"
+          onChange={this.updateLabel}
+          type="field"
+          placeholder="'English'"
+        />
+        <div className={styles.buttonWrapper}>
+          <AddButton onClick={this.maybeOnClick} size="sm" />
+        </div>
       </div>
     )
   }

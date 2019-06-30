@@ -2,7 +2,7 @@ import * as React from "react"
 import { classnames } from "util/classnames"
 import styles from "./buttons.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons"
+import { faBars, faPlus, faMinus, faTimes } from "@fortawesome/free-solid-svg-icons"
 
 type Size = "sm" | "lg"
 
@@ -62,5 +62,29 @@ export const CloseButton = ({
 export const MenuButton = ({ onClick }: { onClick(): void }) => (
   <OutlineButton onClick={onClick}>
     <FontAwesomeIcon size="sm" icon={faBars} />
+  </OutlineButton>
+)
+
+export const AddButton = ({
+  onClick,
+  size,
+}: {
+  onClick(): void
+  size?: Size
+}) => (
+  <OutlineButton onClick={onClick} size={size}>
+    <FontAwesomeIcon size="sm" icon={faPlus} />
+  </OutlineButton>
+)
+
+export const MinusButton = ({
+  onClick,
+  size,
+}: {
+  onClick(): void
+  size?: Size
+}) => (
+  <OutlineButton onClick={onClick} size={size}>
+    <FontAwesomeIcon size="sm" icon={faMinus} />
   </OutlineButton>
 )

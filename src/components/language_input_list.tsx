@@ -1,5 +1,5 @@
 import * as React from "react"
-import { LanguageInput } from "components/language_input"
+import { LanguageInput, NewLanguageInput } from "components/language_input"
 import { Language } from "stores/language_store"
 
 type LanguageInputListProps = {
@@ -10,6 +10,12 @@ type LanguageInputListProps = {
 
 export class LanguageInputList extends React.Component<LanguageInputListProps> {
   private readonly onChange = (language: Language.T) => {
+    if (this.props.onLanguageChange) {
+      this.props.onLanguageChange(language)
+    }
+  }
+
+  private readonly onClick = (language: Language.T) => {
     if (this.props.onLanguageChange) {
       this.props.onLanguageChange(language)
     }
@@ -30,10 +36,7 @@ export class LanguageInputList extends React.Component<LanguageInputListProps> {
             />
           ))}
         <span>Add New</span>
-        <LanguageInput
-          language={{ code: "", label: "" }}
-          onChange={this.onChange}
-        />
+        <NewLanguageInput onClick={this.onClick} />
       </div>
     )
   }
