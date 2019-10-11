@@ -2,7 +2,7 @@
   "name": "blank",
   "version": "1.0.0",
   "description": "",
-  "homepage": "https://kavehsajjadi.github.io/wordy",
+  "homepage": "https://kavehsajjadi.github.io/app-wordy",
   "main": "webpack.config.js",
   "scripts": {
     "build:app": "webpack",

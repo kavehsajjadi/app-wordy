@@ -1,6 +1,6 @@
 # Getting Started
 ## URL
-https://kavehsajjadi.github.io/wordy/
+https://kavehsajjadi.github.io/app-wordy/
 
 ## Development
 - `yarn dev`
